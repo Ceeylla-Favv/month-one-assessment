@@ -1,0 +1,5 @@
+region            = "eu-west-1"
+instance_type_web = "t3.micro"
+instance_type_db  = "t3.small"
+key_pair_name     = "your_key_pair_name"
+my_ip             = "your_ip/32"
