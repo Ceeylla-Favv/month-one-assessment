@@ -228,3 +228,53 @@ resource "aws_security_group" "db" {
 
   tags = { Name = "techcorp-db-sg" }
 }
+
+#------Bastion Host-----
+resource "aws_instance" "bastion" {
+  ami                    = data.aws_ami.amazon_linux_2.id
+  instance_type          = var.instance_type_web
+  subnet_id              = aws_subnet.public_1.id
+  vpc_security_group_ids = [aws_security_group.bastion.id]
+  key_name               = var.key_pair_name
+  tags                   = { Name = "techcorp-bastion" }
+}
+
+resource "aws_eip" "bastion" {
+  domain   = "vpc"
+  instance = aws_instance.bastion.id
+  tags     = { Name = "techcorp-bastion-eip" }
+}
+
+#------Web Servers-------
+resource "aws_instance" "web_1" {
+  ami                    = data.aws_ami.amazon_linux_2.id
+  instance_type          = var.instance_type_web
+  subnet_id              = aws_subnet.private_1.id
+  vpc_security_group_ids = [aws_security_group.web.id]
+  key_name               = var.key_pair_name
+  user_data              = file("user_data/web_server_setup.sh")
+  tags                   = { Name = "techcorp-web-1" }
+}
+
+resource "aws_instance" "web_2" {
+  ami                    = data.aws_ami.amazon_linux_2.id
+  instance_type          = var.instance_type_web
+  subnet_id              = aws_subnet.private_2.id
+  vpc_security_group_ids = [aws_security_group.web.id]
+  key_name               = var.key_pair_name
+  user_data              = file("user_data/web_server_setup.sh")
+  tags                   = { Name = "techcorp-web-2" }
+}
+
+#------Database Server-----
+resource "aws_instance" "db" {
+  ami                    = data.aws_ami.amazon_linux_2.id
+  instance_type          = var.instance_type_db
+  subnet_id              = aws_subnet.private_1.id
+  vpc_security_group_ids = [aws_security_group.db.id]
+  key_name               = var.key_pair_name
+  user_data              = file("user_data/db_server_setup.sh")
+  tags                   = { Name = "techcorp-db" }
+}
+
+
