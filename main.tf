@@ -1,4 +1,7 @@
 terraform {
+
+  required_version = ">=1.5.0"
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -9,6 +12,13 @@ terraform {
 
 provider "aws" {
   region = var.region
+
+  default_tags {
+    tags = {
+      Project = "TechCorp"
+      ManagedBy = "terraform"
+    }
+  }
 }
 
 data "aws_ami" "amazon_linux_2" {
@@ -18,6 +28,11 @@ data "aws_ami" "amazon_linux_2" {
   filter {
     name   = "name"
     values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+
+  filter {
+    name = "state"
+    values = ["available"]
   }
 }
 
