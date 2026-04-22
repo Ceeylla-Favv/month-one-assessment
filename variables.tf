@@ -25,3 +25,15 @@ variable "my_ip" {
   description = "IP address with /32 (e.g. 1.2.3.4/32)"
   type        = string
 }
+
+variable "web_password" {
+  description = "Password for the webuser SSH account on web servers. Min 12 characters."
+  type        = string
+  sensitive   = true
+}
+
+variable "db_password" {
+  description = "Password for the dbuser SSH account and PostgreSQL techcorp user. Min 12 characters."
+  type        = string
+  sensitive   = true
+}
