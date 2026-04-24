@@ -53,8 +53,7 @@ id -u dbuser &>/dev/null || useradd -m dbuser
 echo "dbuser:${db_password}" | chpasswd
 
 echo "[$(date)] Enabling password SSH authentication..."
-sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sed -i '/^#*PasswordAuthentication/c\PasswordAuthentication yes' /etc/ssh/sshd_config
 systemctl restart sshd
 
 
